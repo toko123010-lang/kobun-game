@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>古文活用判定ゲーム</title>
+<style>
+  body { font-family: 'Hiragino Mincho ProN', serif; text-align: center; padding: 20px; background: #f9f6f1; }
+  h1 { color: #5a4632; }
+  .question { font-size: 1.5em; margin: 20px; }
+  .btn { padding: 10px 20px; margin: 5px; font-size: 1em; cursor: pointer; border-radius: 8px; border: none; background: #d3b98d; color: white; }
+  .btn:hover { background: #b89c75; }
+  .result { font-size: 1.3em; margin-top: 20px; height: 2em; }
+  .score { margin-top: 10px; font-weight: bold; }
+</style>
+</head>
+<body>
+<h1>古文活用判定ゲーム</h1>
+<div class="question" id="question">読み込み中...</div>
+<div id="buttons"></div>
+<div class="result" id="result"></div>
+<div class="score" id="score">スコア: 0</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  const quizData = [
+    {verb: "書く", after: "ず", answer: "四段"},
+    {verb: "受く", after: "る", answer: "下二段"},
+    {verb: "見る", after: "ず", answer: "上一段"},
+    {verb: "蹴る", after: "ば", answer: "下一段"},
+    {verb: "死ぬ", after: "ば", answer: "ナ変"},
+    {verb: "来", after: "たり", answer: "カ変"},
+    {verb: "す", after: "けり", answer: "サ変"},
+    {verb: "あり", after: "ども", answer: "ラ変"},
+    {verb: "射る", after: "ぬ", answer: "上一段"},
+    {verb: "集む", after: "ず", answer: "下二段"},
+    {verb: "用ゐる", after: "けり", answer: "上一段"}
+  ];
+
+  const answers = ["四段", "上一段", "下一段", "下二段", "ラ変", "ナ変", "カ変", "サ変"];
+  let score = 0;
+
+  function newQuestion(){
+    const q = quizData[Math.floor(Math.random()*quizData.length)];
+    document.getElementById('question').textContent = `「${q.verb}」＋「${q.after}」 → 活用種類は？`;
+    document.getElementById('result').textContent = "";
+
+    const btnContainer = document.getElementById('buttons');
+    btnContainer.innerHTML = "";
+    answers.forEach(ans => {
+      const btn = document.createElement('button');
+      btn.textContent = ans;
+      btn.className = 'btn';
+      btn.onclick = () => {
+        if(ans === q.answer){
+          document.getElementById('result').textContent = "⭕ 正解！";
+          score++;
+        } else {
+          document.getElementById('result').textContent = `❌ 不正解！正解は ${q.answer}`;
+        }
+        document.getElementById('score').textContent = `スコア: ${score}`;
+        setTimeout(newQuestion, 1500);
+      }
+      btnContainer.appendChild(btn);
+    });
+  }
+
+  newQuestion();
+});
+</script>
+</body>
+</html>
